@@ -1,0 +1,175 @@
+<!DOCTYPE html> 
+<html lang = "en" data-theme="light">
+    <head>
+        <meta charset = "UTF-8">
+        <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+        <title>Quick & Easy Recipes</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+
+        <style> 
+            /* Force light background across the entire page */
+            body {
+                background-color: #d5dde6;
+                color: #212529;
+                padding-bottom: 3rem;
+            }
+
+            .hero-header {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                        url('https://media.istockphoto.com/id/1059783606/photo/food-background-cooking-on-the-old-background-free-copy-space-top-view.jpg?s=170667a&w=0&k=20&c=qEQEhTre0xXDjo9O-YhzoLbfZdmzQKWnydfVScd8nAA=') no-repeat center center/cover;
+                padding: 3.5rem 2rem;
+                border-radius: 12px;
+                margin-bottom: 2rem;
+                text-align: center;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+                border: 1px solid #e9ecef;
+            }
+
+            .hero-header h1 {
+                color: #ffffff;
+                margin-bottom: 0.5rem;
+                font-size: 2.25rem;
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+            }
+
+            .hero-header p {
+                color: #919eb9;
+                margin-bottom: 0;
+                font-size: 1.1rem;
+                text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+            }
+
+            .recipe-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1.5rem;
+            }
+
+            @media (max-width: 900px) {
+            .recipe-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            }
+            @media (max-width: 600px) {
+            .recipe-grid {
+                grid-template-columns: 1fr;
+            }
+            }
+
+            /* Card Formatting */
+            article.card {
+                background-color: #ffffff;
+                border: 1px solid #e5e7eb;
+                border-radius: 12px;
+                overflow: hidden;
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+            }
+
+            article.card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            }
+
+            .card-img {
+                width: 100%;
+                height: 200px;
+                object-fit: cover;
+            }
+
+            .card-content {
+                padding: 1.25rem;
+                display: flex;
+                flex-direction: column;
+                flex-grow: 1;
+            }
+
+            .card-header {
+                background-color: #20293d; 
+                margin: -1.25rem -1.25rem 1rem -1.25rem;
+                padding: 1rem 1.25rem; 
+            }
+
+            .card-header h3 {
+                font-size: 1.25rem;
+                margin-bottom: 0.25rem;
+                color: #b9c4db !important; 
+            }
+
+            .cuisine-badge {
+                display: inline-block;
+                font-size: 0.8rem;
+                font-weight: 600;
+                color: #9a3412;
+                background-color: #ffedd5;
+                padding: 0.2rem 0.6rem;
+                border-radius: 20px;
+            }
+
+            .card-body {
+                flex-grow: 1;
+                font-size: 0.95rem;
+                color: #1f2937;
+                margin-bottom: 1rem;
+            }
+
+            .meta-info {
+                font-size: 0.875rem;
+                color: #2e3744;
+                margin-top: 0.5rem;
+            }
+
+            .card-footer {
+                margin-top: auto;
+            }
+
+            .card-footer a {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 0;
+            }
+
+        </style>
+    </head>
+    <body>
+        <main class="container">
+            <hgroup class="hero-header">
+                <h1>🥪 Gourmet Express Recipes</h1>
+                <p>Discover quick, delicious, and easy to make recipes for everyday cooking.</p>
+            </hgroup>
+
+            <div id="recipe-list" class="recipe-grid"></div>
+        </main>
+        <script>
+            fetch('/api/recipes') 
+            .then(res => res.json())
+            .then(recipes => {
+                const list = document.getElementById('recipe-list');
+                list.innerHTML = recipes.map(recipe => `
+                    <article class ="card">
+                        <img src="${recipe.image}" alt="${recipe.title} image" style="max-width: 100%; height: 180px; object-fit: cover; border-radius: 8px 8px 0 0; margin-bottom: 1rem;">
+                        <div class ="card-content">
+                            <div class="card-header">
+                                <h3>${recipe.title}</h3>
+                                <span class="cuisine-badge">${recipe.cuisine}</span>
+                            </div>
+                            <div class="card-body">
+                                <p>${recipe.description}</p>
+                                <div class="meta-info">
+                                    <p><strong>Prep Time:</strong> ${recipe.prepTime}</p>
+                                    <p><strong>Difficulty:</strong> ${recipe.difficulty}</p>
+                                </div>
+                            </div>
+                        <div class="card-footer">
+                            <a href="/recipes/${recipe.id}" role="button">View Recipe</a>
+                        </div>
+                        </div>
+                    </article>
+                `).join('');
+            }); 
+        </script>
+    </body>
+</html>
