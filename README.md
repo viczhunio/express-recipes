@@ -33,7 +33,7 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented required features:
 
-<img src='./assets/express-recipes.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='client\assets\express-recipes.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 <!-- Replace this with whatever GIF tool you used! -->
 GIF created with ScreentoGif
@@ -45,6 +45,56 @@ GIF created with ScreentoGif
 ## Notes
 
 Overriding default system dark mode settings in Pico CSS to enforce a clean light theme required using explicit CSS specificity and `data-theme="light"` configuration. Additionally, ensuring the custom CSS grid layout maintained exactly three cards per row without squishing content required fine-tuning responsive breakpoint media queries.
+
+## License
+
+Copyright [2026] [Victoria Zhunio]
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+
+> http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+--- 
+            
+# WEB103 Project 2 - Gourmet Express Recipes
+
+Submitted by: **[Victoria Zhunio]**
+
+About this web app: A recipe listing web app where users can browse a collection of quick and easy recipes, search by title or cuisine, and click into individual recipes to view full ingredients and instructions. Built with vanilla HTML, CSS, and JavaScript on the frontend, and an Express + PostgreSQL backend hosted on Render.
+
+Time spent: **[5]** hours
+
+## Required Features
+
+The following **required** functionality is completed:
+
+- [x] **The web app uses only HTML, CSS, and JavaScript without a frontend framework**
+- [x] **The web app is connected to a PostgreSQL database, with an appropriately structured database table for the list items**
+  - [x] **NOTE: Your walkthrough added to the README must include a view of your Render dashboard demonstrating that your Postgres database is available**
+  - [x] **NOTE: Your walkthrough added to the README must include a demonstration of your table contents. Use the psql command 'SELECT * FROM tablename;' to display your table contents.**
+
+The following **optional** features are implemented:
+
+- [x] The user can search for items by a specific attribute
+
+The following **additional** features are implemented:
+
+- [x] Custom 404 page for invalid/nonexistent recipe IDs
+- [x] Responsive card grid layout that adjusts for mobile, tablet, and desktop screen sizes
+
+## Video Walkthrough
+
+Here's a walkthrough of implemented required features:
+
+<img src='client\assets\express-recipes-2.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
+GIF created with ScreenToGif
+
+## Notes
+
+Building the individual recipe detail pages was the trickiest part of this project. I ran into a column-naming mismatch where PostgreSQL automatically lowercases unquoted column names (prepTime became preptime), which caused data to silently come back as undefined on the frontend until I aliased the column in my SQL queries. I also had to properly separate my backend route logic from my static frontend files, and add graceful 404 handling for recipe IDs that don't exist in the database.
 
 ## License
 

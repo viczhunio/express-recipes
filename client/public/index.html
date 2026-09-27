@@ -141,13 +141,25 @@
                 <p>Discover quick, delicious, and easy to make recipes for everyday cooking.</p>
             </hgroup>
 
+            <input 
+                type="text"
+                id="search-input"
+                placeholder="Search by title or cuisine..."
+                style="margin-bottom: 1.5rem;"
+            />
+            
             <div id="recipe-list" class="recipe-grid"></div>
         </main>
+
         <script>
-            fetch('/api/recipes') 
-            .then(res => res.json())
-            .then(recipes => {
+            let allRecipes = []; 
+
+            const renderRecipes = (recipes) => {
                 const list = document.getElementById('recipe-list');
+                if (recipes.length === 0) {
+                    list.innerHTML = '<p>No recipes found.</p>';
+                    return; 
+                }
                 list.innerHTML = recipes.map(recipe => `
                     <article class ="card">
                         <img src="${recipe.image}" alt="${recipe.title} image" style="max-width: 100%; height: 180px; object-fit: cover; border-radius: 8px 8px 0 0; margin-bottom: 1rem;">
@@ -168,7 +180,23 @@
                         </div>
                         </div>
                     </article>
-                `).join('');
+                `).join(''); 
+            }
+            fetch('/api/recipes') 
+            .then(res => res.json())
+            .then(recipes => {
+                allRecipes = recipes;
+                renderRecipes(allRecipes); 
+            }); 
+            
+            document.getElementById('search-input').addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                const filtered = allRecipes.filter(recipe => 
+                    recipe.title.toLowerCase().includes(query) || 
+                    recipe.cuisine.toLowerCase().includes(query)
+                );
+                renderRecipes(filtered);      
+                   
             }); 
         </script>
     </body>
