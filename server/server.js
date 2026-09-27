@@ -1,40 +1,30 @@
 const express = require('express'); 
 const path = require('path'); 
-const recipes = require('./data/recipes');
+const cors = require('cors');
+require('dotenv').config();
+
+const recipeRoutes = require('./routes/recipes');
 
 const app = express(); 
-const PORT = process.env.PORT || 3000; 
+const PORT = process.env.PORT || 5000; 
 
+app.use(cors());
+app.use(express.json()); 
+
+// Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, '../client/public'))); 
 
-app.get('/api/recipes', (req, res) => 
-{
-    res.json(recipes); 
-}); 
+// API routes for recipes
+app.use('/api/recipes', recipeRoutes); 
 
-app.get('/api/recipes/:id', (req, res) => {
-    const recipe = recipes.find(r => r.id === req.params.id);
-    if (recipe) {
-        res.json(recipe); 
-    } else {
-        res.status(404).json({ error: 'Recipe not found' });
-    }
-}); 
-
-// Detailed recipe page route
+// Recipe html when accessing /api/recipes/:id
 app.get('/recipes/:id', (req, res) => {
-    const recipe = recipes.find(r => r.id === req.params.id);
-    if (recipe) {
-        res.sendFile(path.join(__dirname, 'public', 'recipe.html'));
-    } else {
-        res.status(404).send('Recipe not found'); // ?? 
-    }
+    res.sendFile(path.join(__dirname, '../client/public/recipe.html'))
 }); 
 
-// Fallback / Catchall 
-app.use(function(req, res) {
-    res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
-}); 
+app.use((req, res) => {
+    res.status(404).sendFile(path.join(__dirname, '../client/public/404.html')); 
+})
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

@@ -15,8 +15,16 @@
             const id = window.location.pathname.split('/').pop();
 
             fetch(`/api/recipes/${id}`)
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) {
+                    window.location.href = '/404.html';
+                    return null;
+                }
+                return res.json();
+            })
             .then(recipe => {
+                if (!recipe) return; // already redirected
+
                 document.getElementById('recipe-detail').innerHTML = `
                     <article> 
                         <header> 
@@ -43,7 +51,11 @@
                             </footer>
                         </article>
                 `;
-            }); 
+            })
+            .catch(err => {
+                console.error('Error loading recipe:', err);
+                window.location.href = '/404.html';
+            });
         </script>
     </body>>
 </html>
